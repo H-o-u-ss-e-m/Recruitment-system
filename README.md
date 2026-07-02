@@ -41,81 +41,7 @@ recruitment-system/
 
 ## 📊 Diagramme de Classes & Base de Données
 
-Le schéma ci-dessous représente la structure des données et les relations entre les entités principales de l'application (modélisation de la base de données PostgreSQL).
-
-```mermaid
-classDiagram
-    direction LR
-    class Candidate {
-        -Long id {PK}
-        -String firstName
-        -String lastName
-        -String email {unique}
-        -String password
-        -String phone
-        -LocalDate birthDate
-        -String gender
-        -String nationality
-        -String address
-        -String postalCode
-        -String city
-        -String educationLevel
-        -String university
-        -String specialite
-        -String linkedinUrl
-        -String githubUrl
-        -String portfolioUrl
-        -String profileDescription {Text}
-        -LocalDateTime createdAt
-        +onCreate() void
-    }
-    class Application {
-        -Long id {PK}
-        -String cvUrl
-        -String cvFilename
-        -String lettreMotivation {Text}
-        -Double expectedSalary
-        -ApplicationStatus status
-        -LocalDateTime datePostulation
-        -LocalDateTime lastUpdated
-        +onCreate() void
-        +onUpdate() void
-    }
-    class ApplicationStatus {
-        <<enumeration>>
-        EN_ATTENTE
-        EN_COURS
-        ACCEPTE
-        REFUSE
-    }
-    class JobOffer {
-        -Long id {PK}
-        -String titrePoste
-        -String descriptionPoste {Text}
-        -String competencesRequises {Text}
-        -LocalDate datePublication
-        -LocalDate dateLimite
-        -JobStatus status
-        -Recruiter recruiter
-        +onCreate() void
-    }
-    class JobStatus {
-        <<enumeration>>
-        OPEN
-        CLOSED
-    }
-    class Recruiter {
-        -Long id {PK}
-        -String login {unique}
-        -String password
-    }
-
-    Candidate "1" --> "0..*" Application : postule
-    Application "0..*" --> "1" JobOffer : concerne
-    Recruiter "1" --> "0..*" JobOffer : publie (created_by)
-    Application ..> ApplicationStatus : utilise
-    JobOffer ..> JobStatus : utilise
-```
+<img width="1536" height="1024" alt="Diagramme de Classes" src="https://github.com/user-attachments/assets/a3bd1709-3110-4d7b-b731-f9ffba581522" />
 
 ### Relations et Règles de Cardinalité :
 1. **Candidat & Candidature (1 to 0..\*)** : Un `Candidate` peut soumettre zéro ou plusieurs candidatures (`Application`), mais chaque candidature est liée à un unique candidat.
@@ -166,6 +92,23 @@ classDiagram
   - **Visualiseur PDF intégré** pour lire le CV directement dans l'application sans téléchargement forcé.
   - Changement de statut avec boîte de dialogue de confirmation (`En attente`, `En cours d'étude`, `Acceptée`, `Refusée`).
   - **Envoi automatique d'emails formatés** informant le candidat du changement de statut de sa candidature.
+
+---
+
+## 📧 Notifications & Système d'Emailing Automatique
+
+Le système intègre un mécanisme d'envoi d'emails automatique asynchrone géré par le backend Spring Boot pour tenir le candidat informé de l'évolution de son dossier en temps réel.
+
+### ⚙️ Fonctionnement des Emails
+1. **Dépôt de la Candidature** : Dès que le candidat valide la soumission de son dossier avec son CV en format PDF, un premier email de confirmation lui est envoyé automatiquement pour accuser réception de sa postulation.
+2. **Mise à jour du Statut par le Recruteur** : Depuis le tableau de bord RH, lorsque le recruteur modifie le statut d'une candidature (`En cours d'étude`, `Acceptée` ou `Refusée`), un email HTML personnalisé et stylisé est envoyé instantanément à l'adresse du candidat.
+3. **Mise en Page Responsive & Moderne** : Les emails générés utilisent un gabarit HTML moderne reprenant les couleurs professionnelles de GroupRIF, mentionnant explicitement le prénom du candidat, le titre du poste visé, le nouveau statut attribué, ainsi qu'un message explicatif adapté.
+
+### 📸 Aperçu de l'Email de Notification de Statut
+*Ci-dessous, un aperçu visuel d'un email de notification automatique reçu par un candidat (ici, lors du passage de son dossier au statut "En cours d'étude") :*
+
+<img width="803" height="497" alt="Capture d&#39;écran 2026-07-02 103305" src="https://github.com/user-attachments/assets/a2a430b0-e088-4175-bcbf-fc7f8b166343" />
+
 
 ---
 
