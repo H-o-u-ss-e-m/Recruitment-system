@@ -1,0 +1,6 @@
+{
+  "name": "RIF Recrutement",
+  "description": "Portail moderne et professionnel de gestion des candidatures et offres de stage/emploi pour le Groupe RIF.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
